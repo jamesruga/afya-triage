@@ -42,14 +42,14 @@ The visualization above reflects evaluation metrics across a synthetic populatio
 ---
 ## 🛠️ Local Setup & Testing
 1. Install dependencies:
-   pip install -r requirements.txt
+pip install -r requirements.txt
 2. Run test suite:
-   PYTHONPATH=. pytest -v
+PYTHONPATH=. pytest -v
 3. Generate visualizations:
-   PYTHONPATH=. python3 src/visualize.py
+PYTHONPATH=. python3 src/visualize.py
 4. Start production server:
-   chmod +x start_server.sh
-   ./start_server.sh
+chmod +x start_server.sh
+./start_server.sh
 ---
 ## 📡 API Endpoint Reference
 ### Single Patient Assessment (POST /triage)
@@ -87,6 +87,6 @@ curl -X POST http://127.0.0.1:8000/triage/batch \
 ---
 ## 🐳 Container Deployment
 1. Build the image:
-   docker build -t afya-triage:latest .
+docker build -t afya-triage:latest .
 2. Run the container:
-   docker run -d -p 8000:8000 --name afya-triage-service afya-triage:latest
+docker run -d -p 8000:8000 --name afya-triage-service afya-triage:latest
