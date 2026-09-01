@@ -1,0 +1,12 @@
+{
+    "model_type": "Deterministic_Weighted_Triage_Engine",
+    "accuracy": 0.994,
+    "safety_overrides_triggered": 11,
+    "feature_importance": {
+        "oxygen_saturation": 0.35,
+        "respiratory_rate": 0.25,
+        "systolic_bp": 0.2,
+        "heart_rate": 0.12,
+        "temperature": 0.08
+    }
+}
