@@ -5,60 +5,50 @@ from src.triage import AfyaTriageEngine
 app = Flask(__name__)
 engine = AfyaTriageEngine()
 
-tier_mapping = {
-    1: "Level 1 - Critical",
-    2: "Level 2 - Emergent",
-    3: "Level 3 - Urgent",
-    4: "Level 4 - Non-urgent"
-}
-
-@app.route('/', methods=['GET'])
+@app.route('/health', methods=['GET'])
 def health_check():
-    return jsonify({"status": "healthy", "service": "Afya Triage Microservice"})
+    return jsonify({
+        "status": "healthy",
+        "service": "afya-triage",
+        "version": "1.0.0"
+    }), 200
 
 @app.route('/triage', methods=['POST'])
-def triage_patient():
-    try:
-        data = request.get_json()
-        required = ['systolic_bp', 'diastolic_bp', 'heart_rate', 'respiratory_rate', 'oxygen_saturation', 'temperature']
-        for field in required:
-            if field not in data:
-                return jsonify({"error": f"Missing required field: {field}"}), 400
-
-        df = pd.DataFrame([data])
-        levels, overrides = engine.classify(df)
-
-        level = int(levels[0])
-        return jsonify({
-            "triage_level": level,
-            "category": tier_mapping[level],
-            "hypoxia_safety_override": bool(overrides[0])
-        })
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+def triage_single():
+    data = request.get_json()
+    if not data:
+        return jsonify({"error": "No input data provided"}), 400
+    
+    df = pd.DataFrame([data])
+    levels, overrides = engine.classify(df)
+    
+    return jsonify({
+        "triage_level": int(levels[0]),
+        "category": f"Level {levels[0]} - {engine.get_level_name(levels[0])}",
+        "hypoxia_safety_override": bool(overrides[0])
+    }), 200
 
 @app.route('/triage/batch', methods=['POST'])
 def triage_batch():
-    try:
-        data = request.get_json()
-        if not isinstance(data, list):
-            return jsonify({"error": "Payload must be a JSON array of patient vital objects"}), 400
+    data = request.get_json()
+    if not isinstance(data, list):
+        return jsonify({"error": "Batch payload must be a JSON array"}), 400
+    
+    df = pd.DataFrame(data)
+    levels, overrides = engine.classify(df)
+    
+    results = []
+    for level, override in zip(levels, overrides):
+        results.append({
+            "triage_level": int(level),
+            "category": f"Level {level} - {engine.get_level_name(level)}",
+            "hypoxia_safety_override": bool(override)
+        })
+        
+    return jsonify({
+        "count": len(results),
+        "results": results
+    }), 200
 
-        df = pd.DataFrame(data)
-        levels, overrides = engine.classify(df)
-
-        results = []
-        for lvl, ovr in zip(levels, overrides):
-            level = int(lvl)
-            results.append({
-                "triage_level": level,
-                "category": tier_mapping[level],
-                "hypoxia_safety_override": bool(ovr)
-            })
-
-        return jsonify({"count": len(results), "results": results})
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8000)
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=8000)
