@@ -1,26 +1,22 @@
 name: Daily System Telemetry Sync
-
 on:
   schedule:
-    - cron: '0 0 * * *'  # Runs daily at 00:00 UTC
+    - cron: '0 21 * * *'
   workflow_dispatch:
-
-permissions:
-  contents: write
-
 jobs:
   telemetry-sync:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-
-    - name: Log Health Metrics
-      run: |
-        mkdir -p data
-        echo "Clinical Engine Telemetry - UTC: $(date -u) - Status: Operational" > data/system_health.log
-        git config user.name "github-actions[bot]"
-        git config user.email "github-actions[bot]@users.noreply.github.com"
-        git add data/system_health.log
-        git commit -m "chore(telemetry): update daily clinical telemetry log" || exit 0
-        git push
+      - name: Checkout Code
+        uses: actions/checkout@v3
+      - name: Log Clinical System Telemetry
+        run: |
+          mkdir -p data
+          echo "Clinical Engine Telemetry - UTC: $(date -u) - Status: Operational" >> data/system_health.log
+      - name: Commit & Push Telemetry Entry
+        run: |
+          git config --global user.name "jamesruga"
+          git config --global user.email "jamesruga07@gmail.com"
+          git add data/system_health.log
+          git commit -m "telemetry: update daily clinical activity log [skip ci]" || true
+          git push
