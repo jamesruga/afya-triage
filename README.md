@@ -1,5 +1,8 @@
 # Afya Triage Microservice
 
+![Build Status](https://github.com/jamesruga/afya-triage/actions/workflows/ci.yml/badge.svg) ![Python](https://img.shields.io/badge/Python-3.10-blue.svg) ![Flask](https://img.shields.io/badge/Flask-WSGI-000000.svg) ![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED.svg) ![License](https://img.shields.io/badge/License-MIT-orange.svg)
+
+
 An Emergency Severity Index (ESI)-aligned clinical risk assessment microservice built for low-resource deployment environments.
 
 ---
