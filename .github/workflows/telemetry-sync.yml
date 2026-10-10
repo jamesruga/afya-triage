@@ -1,18 +1,25 @@
 name: Daily System Telemetry Sync
+
 on:
   schedule:
-    - cron: '0 21 * * *'
+    - cron: '0 0 * * *'
   workflow_dispatch:
+
+permissions:
+  contents: write
+
 jobs:
   telemetry-sync:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-      - name: Log Clinical System Telemetry
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Update Telemetry Activity Log
         run: |
           mkdir -p data
-          echo "Clinical Engine Telemetry - UTC: $(date -u) - Status: Operational" >> data/system_health.log
+          echo "Telemetry log entry: $(date -u)" >> data/system_health.log
+
       - name: Commit & Push Telemetry Entry
         run: |
           git config --global user.name "jamesruga"
