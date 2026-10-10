@@ -8,7 +8,7 @@ An Emergency Severity Index (ESI)-aligned clinical risk assessment microservice 
 
 ***Afya*** is the Swahili word for ***Health***.
 
-In rural clinics and under-resourced emergency departments across East Africa, healthcare workers face severe staffing shortages and overwhelming patient surges. Delayed recognition of critically ill individuals—particularly patients with silent hypoxia or unstable vital signs—frequently leads to preventable morbidity and mortality.
+In rural clinics and under-resourced emergency departments across East Africa, healthcare workers face severe staffing shortages and overwhelming patient surges. Delayed recognition of critically ill individuals - particularly patients with silent hypoxia or unstable vital signs - frequently leads to preventable morbidity and mortality.
 
 Afya Triage was built as a zero-dependency, deterministic clinical triage engine capable of running on low-cost edge devices and Android hardware via Termux. It prioritizes patients into 4 clinical urgency levels and enforces strict safety overrides for severe hypoxia (SpO2 < 88%), ensuring vital risk decisions occur in milliseconds even during power or internet grid failures.
 
